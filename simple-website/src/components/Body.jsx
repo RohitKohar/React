@@ -1,27 +1,56 @@
-import ProductCard from "./ProductCard"
+import React, { useEffect, useState } from "react";
+import ProductCard from "./ProductCard";
+import { productData } from "../utils/productData";
 
-const Body = () =>{
-    return (
-        <section className='flex flex-col gap-4 px-2 py-2 '>
-      <div className='flex gap-3'>
-        <input
-          type='text'
-          className='w-80 px-4 py-2 pr-10 text-sm text-gray-700 bg-white border border-gray-800 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400'
-          placeholder='Search...'
-        />
-        Search
+const Body = () => {
+  let [topRatedProducts,setTopRatedProducts]=useState([]);
+
+  useEffect(()=>{
+  fetchProducts();
+  },[])
+
+  const fetchProducts = async()=>{
+    const result = await fetch("https://fakestoreapi.com/products");
+    const json = await result.json();
+    setTopRatedProducts(json);
+  }
+  const topRatedProductsData=()=>{
+    setTopRatedProducts(productData.filter((product)=>product.rating.rate>=4))
+    console.log(topRatedProducts)
+  };
+  return (
+    <section className="flex flex-col gap-6 px-6 py-8 bg-gray-50 min-h-screen">
+      {/* Search bar section */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="relative w-full sm:w-96">
+          <input
+            type="text"
+            className="w-full px-4 py-2 pr-10 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Search for products..."
+          />
+          <span className="absolute right-3 top-2.5 text-gray-400 pointer-events-none">
+            🔍
+          </span>
+        </div>
+        <button className="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2" onClick={topRatedProductsData}>
+          Top Rated Products
+        </button>
       </div>
-      <div className='flex flex-wrap justify-center gap-4 product-items'>
-        <ProductCard 
-        title="iphone" 
-        description="This is an expensive phone that's speed is fast."
-        price="Rs.150000"
-        image="data:image/jpeg;base64,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"
-        />
-    
+
+      {/* Product grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {topRatedProducts.map((product) => (
+          <ProductCard
+            key={product.id}
+            title={product.title}
+            description={product.description}
+            price={product.price}
+            image={product.image}
+          />
+        ))}
       </div>
     </section>
-    )
-}
+  );
+};
 
-export default Body
+export default Body;
