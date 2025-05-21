@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { productData } from "../utils/productData";
 import ShimmerProductCard from "./ShimmerProductCard";
+import { Link } from "react-router";
 
 const Body = () => {
   let [topRatedProducts,setTopRatedProducts]=useState([]);
@@ -21,7 +21,7 @@ const Body = () => {
     setAllProducts(json);
   }
   const topRatedProductsData=()=>{
-    setTopRatedProducts(productData.filter((product)=>product.rating.rate>=4))
+    setTopRatedProducts(topRatedProducts.filter((product)=>product.rating.rate>=4))
     console.log(topRatedProducts)
   };
 
@@ -38,7 +38,13 @@ const Body = () => {
       ))}     
       </div>
         );
-    }
+  }
+  
+  const clearFilters = () => {
+    setTopRatedProducts(allproducts);
+    setSearchText("");
+  };
+
   return (
     <section className="flex flex-col gap-6 px-6 py-8 bg-gray-50 min-h-screen">
       {/* Search bar section */}
@@ -47,30 +53,44 @@ const Body = () => {
           <input
             type="text"
             className="w-full px-4 py-2 pr-10 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search for products..." value={searchText} onChange={changeText}
+            placeholder="Search for products..."
+            value={searchText}
+            onChange={changeText}
           />
         </div>
-        <button className="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2" onClick={searchProducts}>
+        <button
+          className="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          onClick={searchProducts}
+        >
           Search
         </button>
+
         <button
           className="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
           onClick={topRatedProductsData}
         >
           Top Rated Products
         </button>
+
+        <button
+          className="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          onClick={clearFilters}
+        >
+          Clear Filters
+        </button>
       </div>
 
       {/* Product grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {topRatedProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            title={product.title}
-            description={product.description}
-            price={product.price}
-            image={product.image}
-          />
+          <Link to={`products/${product.id}`} key={product.id}>
+            <ProductCard
+              title={product.title}
+              description={product.description}
+              price={product.price}
+              image={product.image}
+            />
+          </Link>
         ))}
       </div>
     </section>

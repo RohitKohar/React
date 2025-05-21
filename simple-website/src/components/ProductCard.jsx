@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProductCard = ({ id, title, image, description, price }) => {
+const ProductCard = ({ id, title, image,category, description, price }) => {
   return (
     <div className="flex flex-col gap-4 border border-gray-300 rounded-2xl p-4 w-72 shadow-md hover:shadow-xl transition-shadow duration-300 bg-white group">
       {/* Image Container with Animation */}
@@ -17,6 +17,8 @@ const ProductCard = ({ id, title, image, description, price }) => {
 
       {/* Description */}
       <p className="text-sm text-gray-600 line-clamp-3">{description}</p>
+
+      <p className="text-sm text-gray-600 line-clamp-3">{category}</p>
 
       {/* Price */}
       <div className="mt-auto">
